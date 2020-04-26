@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+log() {
+    echo $1 1>&2
+}
+
+if [ $# != 1 ]; then
+    log "Usage: downsample-flac [file to downsample]"
+    exit 1
+fi
+
+readonly file=$1
+
+[ ! -e "${file}" ] \
+    && log "${file} doesn't exist" \
+    && exit 1
+
+sample_rate=$(sox --i "${file}" | grep "Sample Rate" | sed -r 's/.* ([0-9]+)/\1/g')
+precision=$(sox --i "${file}" | grep "Precision" | sed -r 's/.* ([0-9]+)/\1/g')
+
+if [ "${sample_rate}" -gt 48000 ] &&  [ "${precision}" == "24-bit" ]; then
+  log "${file} is ${precision}@${sample_rate}, downsampling to 24-bit@48000..."
+  sox "${file}" -b 24 -t flac - rate 48000 dither -s
+  #ffmpeg -i "${file}" -resampler soxr -sample_fmt s24 -ar 48000 -f flac -
+else
+  log "${file} is ${precision}@${sample_rate}, using as is..."
+  cat "${file}"
+fi
+
