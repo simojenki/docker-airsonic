@@ -2,25 +2,26 @@ FROM ubuntu:18.04
 
 MAINTAINER simojenki
 
-ARG BRANCH="release-10.6-sonos"
+ARG DOCKER_TAG=latest
 
 RUN apt-get update && \
     apt-get install -y \
         locales \
         maven \
         git \
-        openjdk-8-jdk-headless
+        openjdk-11-jdk-headless
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN git clone -b "${BRANCH}" https://github.com/simojenki/airsonic.git
+RUN git clone -b $(if [ "${DOCKER_TAG}" = "latest" ]; then echo "master-sonos"; else echo "release-${DOCKER_TAG}-sonos"; fi) https://github.com/simojenki/airsonic.git
 
 WORKDIR /airsonic
 
-RUN mvn test package
+RUN git status | grep "On branch" && \
+    mvn test package
 
 FROM linuxserver/airsonic:latest
 
