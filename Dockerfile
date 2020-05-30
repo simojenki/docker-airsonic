@@ -23,7 +23,7 @@ RUN echo "cloning: -b ${BRANCH}@${REPO}" && \
 WORKDIR /airsonic
 
 RUN echo "Building revision: $(git rev-parse HEAD)" && \
-    mvn test package
+    mvn test package -Dcheckstyle.skip
 
 FROM linuxserver/airsonic:latest
 
