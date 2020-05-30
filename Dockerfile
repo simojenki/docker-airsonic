@@ -2,9 +2,10 @@ FROM ubuntu:18.04
 
 MAINTAINER simojenki
 
-ENV DOCKER_TAG=latest
+ARG REPO=${REPO}
+ARG BRANCH=${BRANCH}
 
-RUN echo "DOCKER_TAG=${DOCKER_TAG}"
+RUN echo "DOCKER_TAG=${DOCKER_TAG} REPO=${REPO} & BRANCH=${BRANCH}"
 
 # RUN apt-get update && \
 #     apt-get install -y \

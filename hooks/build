@@ -1,0 +1,14 @@
+#!/bin/bash
+
+REPO=https://github.com/simojenki/airsonic.git
+
+if [ "${DOCKER_TAG}" == "latest" ]; then
+    BRANCH=master
+else if [ "${DOCKER_TAG}" == "10.6" ]; then
+    BRANCH=release-10.6-sonos
+else
+    echo "Unsupported DOCKER_TAG value of ${DOCKER_TAG}"
+    exit 1
+fi
+
+docker build --build-arg DOCKER_TAG=$DOCKER_TAG --build-arg REPO=$DOCKER_TAG --build-arg DOCKER_TAG=$DOCKER_TAG -f $DOCKERFILE_PATH -t $IMAGE_NAME .
