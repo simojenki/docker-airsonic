@@ -2,34 +2,36 @@ FROM ubuntu:18.04
 
 MAINTAINER simojenki
 
-ARG DOCKER_TAG=latest
+ENV DOCKER_TAG=latest
 
-RUN apt-get update && \
-    apt-get install -y \
-        locales \
-        maven \
-        git \
-        openjdk-11-jdk-headless
+RUN echo "DOCKER_TAG=${DOCKER_TAG}"
 
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+# RUN apt-get update && \
+#     apt-get install -y \
+#         locales \
+#         maven \
+#         git \
+#         openjdk-11-jdk-headless
 
-RUN git clone -b $(if [ "${DOCKER_TAG}" = "latest" ]; then echo "master-sonos"; else echo "release-${DOCKER_TAG}-sonos"; fi) https://github.com/simojenki/airsonic.git
+# RUN locale-gen en_US.UTF-8
+# ENV LANG en_US.UTF-8
+# ENV LANGUAGE en_US:en
+# ENV LC_ALL en_US.UTF-8
 
-WORKDIR /airsonic
+# RUN git clone -b "sonos/$(if [ "${DOCKER_TAG}" = "latest" ]; then echo "master"; else echo "${DOCKER_TAG}"; fi)" https://github.com/simojenki/airsonic.git
 
-RUN git status | grep "On branch" && \
-    mvn test package
+# WORKDIR /airsonic
 
-FROM linuxserver/airsonic:latest
+# RUN git status | grep "On branch" && \
+#     mvn test package
 
-RUN apt-get update && \
-    apt-get install -y \
-        sox
+# FROM linuxserver/airsonic:latest
 
-COPY downsample-flac /usr/bin/downsample-flac
+# RUN apt-get update && \
+#     apt-get install -y \
+#         sox
 
-COPY --from=0 /airsonic/airsonic-main/target/airsonic.war /app/airsonic/airsonic.war
+# COPY downsample-flac /usr/bin/downsample-flac
+
+# COPY --from=0 /airsonic/airsonic-main/target/airsonic.war /app/airsonic/airsonic.war
 
