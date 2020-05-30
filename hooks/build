@@ -1,16 +1,13 @@
 #!/bin/bash
 
 REPO=https://github.com/simojenki/airsonic.git
+BRANCH="release-10.6-sonos"
 
-LATEST_BRANCH="release-10.6-sonos"
-
-if [ "${DOCKER_TAG}" == "latest" ]; then
-    BRANCH=${LATEST_BRANCH}
-elif [ "${DOCKER_TAG}" == "10.6" ]; then
+if [ "${DOCKER_TAG}" == "10.6" ]; then
     BRANCH=release-10.6-sonos
-else
-    echo "Unsupported DOCKER_TAG value of ${DOCKER_TAG}"
-    exit 1
+elif [ "$DOCKER_TAG" == "randomnicode-sonos" ]; then
+    REPO="https://github.com/randomnicode/airsonic" 
+    BRANCH="sonos"   
 fi
 
 docker build --build-arg DOCKER_TAG=$DOCKER_TAG --build-arg REPO=$REPO --build-arg BRANCH=$BRANCH -f $DOCKERFILE_PATH -t $IMAGE_NAME .
