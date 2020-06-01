@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO=https://github.com/simojenki/airsonic.git
-BRANCH="release-10.6-sonos"
+BRANCH="master-sonos"
 
 if [ "${DOCKER_TAG}" == "10.6" ]; then
     BRANCH=release-10.6-sonos
