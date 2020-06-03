@@ -1,13 +1,20 @@
 #!/bin/bash
 
-REPO=https://github.com/simojenki/airsonic.git
-BRANCH="master-sonos"
-
-if [ "${DOCKER_TAG}" == "10.6" ]; then
-    BRANCH=release-10.6-sonos
+if [ "${DOCKER_TAG}" == "latest" ]; then
+    REPO="https://github.com/simojenki/airsonic.git"
+    BRANCH="master-sonos"
+elif [ "${DOCKER_TAG}" == "10.6" ]; then
+    REPO="https://github.com/simojenki/airsonic.git"
+    BRANCH="release-10.6-sonos"
+elif [ "${DOCKER_TAG}" == "airsonic-advanced" ]; then
+    REPO="https://github.com/airsonic-advanced/airsonic-advanced" 
+    BRANCH="master"   
 elif [ "$DOCKER_TAG" == "randomnicode-sonos" ]; then
     REPO="https://github.com/randomnicode/airsonic" 
     BRANCH="sonos"   
+else
+    echo "Unknown repo/branch configuration for ${DOCKER_TAG}"    
+    exit 1
 fi
 
 docker build --build-arg DOCKER_TAG=$DOCKER_TAG --build-arg REPO=$REPO --build-arg BRANCH=$BRANCH -f $DOCKERFILE_PATH -t $IMAGE_NAME .
