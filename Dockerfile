@@ -18,7 +18,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN echo "cloning: -b ${BRANCH}@${REPO}" && \
-    git clone -b ${BRANCH} ${REPO}
+    git clone -b ${BRANCH} ${REPO} airsonic
 
 WORKDIR /airsonic
 
