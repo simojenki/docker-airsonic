@@ -28,7 +28,9 @@ RUN echo "Building revision: $(git rev-parse HEAD)" && \
 FROM linuxserver/airsonic:latest
 
 RUN apt-get update && \
+    apt-get remove openjdk-8-jre && \
     apt-get install -y \
+        openjdk-11-jre
         sox
 
 COPY downsample-flac /usr/bin/downsample-flac
